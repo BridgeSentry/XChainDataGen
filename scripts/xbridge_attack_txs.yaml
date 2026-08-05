@@ -1,0 +1,467 @@
+bridge: xbridge
+replace_router_address_with: "__XBRIDGE_BRIDGE_ROUTER__"
+blockchains:
+  - blockchain: ethereum
+    txs:
+      # Normal txs
+      - tx_hash: "0x9c5f6ecf37dfc611fe830951f1b0137e1c58809c20ad557fb02a9e1a0ada93fc"
+        block_number: 19653400 # int
+        timestamp: 1713093203 # int
+        main_interaction:
+          from: "0x4B93F2C1234a7b61038f457bF5573372855Ce49A"
+          from_type: user
+          to: "0x47Ddb6A433B76117a98FBeAb5320D8b67D468e31"
+          to_type: router
+        internal_txs:
+          - from: "0x47ddb6a433b76117a98fbeab5320d8b67d468e31"
+            from_type: router
+            to: "0x19ae49b9f38dd836317363839a5f6bfbfa7e319a"
+            to_type: token
+        events:
+          - emitted_by: "0x19Ae49B9F38dD836317363839A5f6bfBFA7e319A"
+            emitter_type: token
+            event_signature: "event Transfer (address indexed from, address indexed to, uint256 value)"
+            event_type: transfer
+            num_args: 3
+            input: "0x000000000000000000000000000000000000000000000000000001cd01325800"
+            relations:
+              - from: "0x4B93F2C1234a7b61038f457bF5573372855Ce49A"
+                from_type: user
+                to: "0x47Ddb6A433B76117a98FBeAb5320D8b67D468e31"
+                to_type: router
+                relation_type: token_transfer
+            value: 1980000000000
+            token_symbol: "STC"
+            token_decimals: 9
+          - emitted_by: "0x19Ae49B9F38dD836317363839A5f6bfBFA7e319A"
+            emitter_type: token
+            event_signature: "event Approval (index_topic_1 address owner, index_topic_2 address spender, uint256 value)"
+            event_type: approval
+            num_args: 3
+            input: "0x0000000000000000000000000000001d6329f1c35ca4bfabb9f55f32fecda800"
+            relations:
+              - from: "0x4B93F2C1234a7b61038f457bF5573372855Ce49A"
+                from_type: user
+                to: "0x47Ddb6A433B76117a98FBeAb5320D8b67D468e31"
+                to_type: router
+                relation_type: token_auth
+            value: 9999999999999999999999999998020000000000
+            token_symbol: "STC"
+            token_decimals: 9
+          - emitted_by: "0x47Ddb6A433B76117a98FBeAb5320D8b67D468e31"
+            emitter_type: router
+            event_signature: "event Locked (index_topic_1 address user, index_topic_2 address inToken, index_topic_3 address outToken, uint256 amount, uint256 feeAmount, uint256 _nonce, uint256 isWrapped, uint256 srcId, uint256 dstId)"
+            event_type: withdrawal_confirmation
+            num_args: 9
+            input: "0x000000000000000000000000000000000000000000000000000001c865065200000000000000000000000000000000000000000000000000000000049c2c06000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000038"
+            value: 1980000000000 # Non-fee amount: 1960200000000
+            token_symbol: "STC"
+            token_decimals: 9
+            token_address: "0x19Ae49B9F38dD836317363839A5f6bfBFA7e319A"
+
+      - tx_hash: "0x953ecfcdca3bbf86e11d9c40ef3d676a86581f643d7a2e39a5c6691b4fb47c24"
+        block_number: 19654787 # int
+        timestamp: 1713109955 # int
+        main_interaction:
+          from: "0x35aB35628b60046a407432E74c333DfFe040Dd36"
+          from_type: user
+          to: "0x47Ddb6A433B76117a98FBeAb5320D8b67D468e31"
+          to_type: router
+        internal_txs:
+          - from: "0x47ddb6a433b76117a98fbeab5320d8b67d468e31"
+            from_type: router
+            to: "0x19ae49b9f38dd836317363839a5f6bfbfa7e319a"
+            to_type: token
+        events:
+          - emitted_by: "0x19Ae49B9F38dD836317363839A5f6bfBFA7e319A"
+            emitter_type: token
+            event_signature: "event Transfer (address indexed from, address indexed to, uint256 value)"
+            event_type: transfer
+            num_args: 3
+            input: "0x000000000000000000000000000000000000000000000000000026516349fe00"
+            relations:
+              - from: "0x35aB35628b60046a407432E74c333DfFe040Dd36"
+                from_type: user
+                to: "0x47Ddb6A433B76117a98FBeAb5320D8b67D468e31"
+                to_type: router
+                relation_type: token_transfer
+            value: 42131000000000
+            token_symbol: "STC"
+            token_decimals: 9
+          - emitted_by: "0x19Ae49B9F38dD836317363839A5f6bfBFA7e319A"
+            emitter_type: token
+            event_signature: "event Approval (index_topic_1 address owner, index_topic_2 address spender, uint256 value)"
+            event_type: approval
+            num_args: 3
+            input: "0x0000000000000000000000000000001d6329f1c35ca4bfabb9f53aae9cb60200"
+            relations:
+              - from: "0x35aB35628b60046a407432E74c333DfFe040Dd36"
+                from_type: user
+                to: "0x47Ddb6A433B76117a98FBeAb5320D8b67D468e31"
+                to_type: router
+                relation_type: token_auth
+            value: 9999999999999999999999999957869000000000
+            token_symbol: "STC"
+            token_decimals: 9
+          - emitted_by: "0x47Ddb6A433B76117a98FBeAb5320D8b67D468e31"
+            emitter_type: router
+            event_signature: "event Locked (index_topic_1 address user, index_topic_2 address inToken, index_topic_3 address outToken, uint256 amount, uint256 feeAmount, uint256 _nonce, uint256 isWrapped, uint256 srcId, uint256 dstId)"
+            event_type: withdrawal_confirmation
+            num_args: 9
+            input: "0x000000000000000000000000000000000000000000000000000025ef4b4192800000000000000000000000000000000000000000000000000000006218086b800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000038"
+            value: 41709690000000 # Non-fee amount: 42131000000000
+            token_symbol: "STC"
+            token_decimals: 9
+            token_address: "0x19Ae49B9F38dD836317363839A5f6bfBFA7e319A"
+
+      - tx_hash: "0xe436658b87fb63df4c8bd36bf4384688d585b09b06684bbc7478ea5e1fe0d55e"
+        block_number: 19662508 # int
+        timestamp: 1713203423 # int
+        main_interaction:
+          from: "0xE1C670adB3644262201C227eEA680A097B732fbF"
+          from_type: user
+          to: "0x47Ddb6A433B76117a98FBeAb5320D8b67D468e31"
+          to_type: router
+        internal_txs:
+          - from: "0x47ddb6a433b76117a98fbeab5320d8b67d468e31"
+            from_type: router
+            to: "0x142a774e8b52550e88e196cedd7a5835acb646d0"
+            to_type: token
+        events:
+          - emitted_by: "0x142a774e8b52550e88e196cedd7a5835acb646d0"
+            emitter_type: token
+            event_signature: "event Transfer (address indexed from, address indexed to, uint256 value)"
+            event_type: transfer
+            num_args: 3
+            input: "0x00000000000000000000000000000000000000000000000000080e0be4a2f840"
+            relations:
+              - from: "0xE1C670adB3644262201C227eEA680A097B732fbF"
+                from_type: user
+                to: "0x47Ddb6A433B76117a98FBeAb5320D8b67D468e31"
+                to_type: router
+                relation_type: token_transfer
+            value: 2267244057000000
+            token_symbol: "SRLTY"
+            token_decimals: 9
+          - emitted_by: "0x142a774e8b52550e88e196cedd7a5835acb646d0"
+            emitter_type: token
+            event_signature: "event Approval (index_topic_1 address owner, index_topic_2 address spender, uint256 value)"
+            event_type: approval
+            num_args: 3
+            input: "0x0000000000000000000000000000001d6329f1c35ca4fffffff7f1f41b5d07c0"
+            relations:
+              - from: "0xE1C670adB3644262201C227eEA680A097B732fbF"
+                from_type: user
+                to: "0x47Ddb6A433B76117a98FBeAb5320D8b67D468e31"
+                to_type: router
+                relation_type: token_auth
+            value: 10000000000000000303786026159759609890752
+            token_symbol: "SRLTY"
+            token_decimals: 9
+          - emitted_by: "0x47Ddb6A433B76117a98FBeAb5320D8b67D468e31"
+            emitter_type: router
+            event_signature: "event Locked (index_topic_1 address user, index_topic_2 address inToken, index_topic_3 address outToken, uint256 amount, uint256 feeAmount, uint256 _nonce, uint256 isWrapped, uint256 srcId, uint256 dstId)"
+            event_type: withdrawal_confirmation
+            num_args: 9
+            input: "0x0000000000000000000000000000000000000000000000000007f96d0ddec7b00000000000000000000000000000000000000000000000000000149ed6c430900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000038"
+            value: 2267244057000000 # Non-fee amount: 2244571616430000
+            token_symbol: "SRLTY"
+            token_decimals: 9
+            token_address: "0x142a774e8b52550e88e196cedd7a5835acb646d0"
+
+      # Attack txs
+      - tx_hash: "0x903d88a92cbc0165a7f662305ac1bff97430dbcccaa0fe71e101e18aa9109c92"
+        block_number: 19723706 # int
+        timestamp: 1713943175 # int
+        attack: True
+        main_interaction:
+          from: "0x0cFC28d16d07219249c6D6d6AE24E7132EE4CaA7"
+          from_type: user
+          to: "0x899266243FD2B9A0426B58BD6d534c6b813Ef27a"
+          to_type: other_account
+        internal_txs:
+          - from: "0x899266243fd2b9a0426b58bd6d534c6b813ef27a"
+            from_type: other_account
+            to: "0x47ddb6a433b76117a98fbeab5320d8b67d468e31"
+            to_type: router
+          - from: "0x899266243fd2b9a0426b58bd6d534c6b813ef27a"
+            from_type: other_account
+            to: "0x47ddb6a433b76117a98fbeab5320d8b67d468e31"
+            to_type: router
+          - from: "0x47ddb6a433b76117a98fbeab5320d8b67d468e31"
+            from_type: router
+            to: "0x19ae49b9f38dd836317363839a5f6bfbfa7e319a"
+            to_type: token
+        events:
+          - emitted_by: "0x19Ae49B9F38dD836317363839A5f6bfBFA7e319A"
+            emitter_type: token
+            event_signature: "event Transfer (address indexed from, address indexed to, uint256 value)"
+            event_type: transfer
+            num_args: 3
+            input: "0x00000000000000000000000000000000000000000000000006b280f1fd0d1b37"
+            relations:
+              - from: "0x47Ddb6A433B76117a98FBeAb5320D8b67D468e31"
+                from_type: router
+                to: "0x0cFC28d16d07219249c6D6d6AE24E7132EE4CaA7"
+                to_type: user
+                relation_type: token_transfer
+            value: 482589886903032631
+            token_symbol: "STC"
+            token_decimals: 9
+          - emitted_by: "0x47Ddb6A433B76117a98FBeAb5320D8b67D468e31"
+            emitter_type: router
+            event_signature: "event TokenWithdrawn (index_topic_1 address user, index_topic_2 address receiver, uint256 amount)"
+            event_type: withdrawal_confirmation
+            num_args: 3
+            input: "0x00000000000000000000000000000000000000000000000006b280f1fd0d1b37"
+            value: 482589886903032631
+            token_symbol: "STC"
+            token_decimals: 9
+            token_address: "0x19Ae49B9F38dD836317363839A5f6bfBFA7e319A"
+
+      - tx_hash: "0x68e2ab07e09e79360dacda1a32a26b7eb2a9fad361330c103d8093c08c27c719"
+        block_number: 19723805 # int
+        timestamp: 1713944375 # int
+        attack: True
+        main_interaction:
+          from: "0x0cFC28d16d07219249c6D6d6AE24E7132EE4CaA7"
+          from_type: user
+          to: "0x899266243FD2B9A0426B58BD6d534c6b813Ef27a"
+          to_type: other_account
+        internal_txs:
+          - from: "0x899266243fd2b9a0426b58bd6d534c6b813ef27a"
+            from_type: other_account
+            to: "0x47ddb6a433b76117a98fbeab5320d8b67d468e31"
+            to_type: router
+          - from: "0x899266243fd2b9a0426b58bd6d534c6b813ef27a"
+            from_type: other_account
+            to: "0x47ddb6a433b76117a98fbeab5320d8b67d468e31"
+            to_type: router
+          - from: "0x47ddb6a433b76117a98fbeab5320d8b67d468e31"
+            from_type: router
+            to: "0x142a774e8b52550e88e196cedd7a5835acb646d0"
+            to_type: token
+        events:
+          - emitted_by: "0x142a774e8b52550e88e196cedd7a5835acb646d0"
+            emitter_type: token
+            event_signature: "event Transfer (address indexed from, address indexed to, uint256 value)"
+            event_type: transfer
+            num_args: 3
+            input: "0x000000000000000000000000000000000000000000000000130c2e42c7b53e6c"
+            relations:
+              - from: "0x47Ddb6A433B76117a98FBeAb5320D8b67D468e31"
+                from_type: router
+                to: "0x0cFC28d16d07219249c6D6d6AE24E7132EE4CaA7"
+                to_type: user
+                relation_type: token_transfer
+            value: 1372522850794421868
+            token_symbol: "SRLTY"
+            token_decimals: 9
+          - emitted_by: "0x47Ddb6A433B76117a98FBeAb5320D8b67D468e31"
+            emitter_type: router
+            event_signature: "event TokenWithdrawn (index_topic_1 address user, index_topic_2 address receiver, uint256 amount)"
+            event_type: withdrawal_confirmation
+            num_args: 3
+            input: "0x000000000000000000000000000000000000000000000000130c2e42c7b53e6c"
+            value: 1372522850794421868
+            token_symbol: "SRLTY"
+            token_decimals: 9
+            token_address: "0x142a774e8b52550e88e196cedd7a5835acb646d0"
+
+      - tx_hash: "0x6956a153b5f595b769f2ddd9d941d32ca9adf61e721da57f5a528dca50ea64f1"
+        block_number: 19723925 # int
+        timestamp: 1713945839 # int
+        attack: True
+        main_interaction:
+          from: "0x0cFC28d16d07219249c6D6d6AE24E7132EE4CaA7"
+          from_type: user
+          to: "0x899266243FD2B9A0426B58BD6d534c6b813Ef27a"
+          to_type: other_account
+        internal_txs:
+          - from: "0x899266243fd2b9a0426b58bd6d534c6b813ef27a"
+            from_type: other_account
+            to: "0x47ddb6a433b76117a98fbeab5320d8b67d468e31"
+            to_type: router
+          - from: "0x899266243fd2b9a0426b58bd6d534c6b813ef27a"
+            from_type: other_account
+            to: "0x47ddb6a433b76117a98fbeab5320d8b67d468e31"
+            to_type: router
+          - from: "0x47ddb6a433b76117a98fbeab5320d8b67d468e31"
+            from_type: router
+            to: "0x5b8650cd999b23cf39ab12e3213fbc8709c7f5cb"
+            to_type: token
+        events:
+          - emitted_by: "0x5b8650cd999b23cf39ab12e3213fbc8709c7f5cb"
+            emitter_type: token
+            event_signature: "event Transfer (address indexed from, address indexed to, uint256 value)"
+            event_type: transfer
+            num_args: 3
+            input: "0x0000000000000000000000000000000000000000000f4314efcb6cbdb0bd2110"
+            relations:
+              - from: "0x47Ddb6A433B76117a98FBeAb5320D8b67D468e31"
+                from_type: router
+                to: "0x0cFC28d16d07219249c6D6d6AE24E7132EE4CaA7"
+                to_type: user
+                relation_type: token_transfer
+            value: 18450672062477135347786000
+            token_symbol: "Mazi"
+            token_decimals: 18
+          - emitted_by: "0x47Ddb6A433B76117a98FBeAb5320D8b67D468e31"
+            emitter_type: router
+            event_signature: "event TokenWithdrawn (index_topic_1 address user, index_topic_2 address receiver, uint256 amount)"
+            event_type: withdrawal_confirmation
+            num_args: 3
+            input: "0x0000000000000000000000000000000000000000000f4314efcb6cbdb0bd2110"
+            value: 18450672062477135347786000
+            token_symbol: "Mazi"
+            token_decimals: 18
+            token_address: "0x5b8650cd999b23cf39ab12e3213fbc8709c7f5cb"
+
+  - blockchain: bnb
+    txs:
+      - tx_hash: "0xcf8aa3b9dfcf9250a5da5e9571f98374f1d649024a81b8d5f7da2f7d92f313f9"
+        block_number: 38133936 # int
+        timestamp: 1713943459 # int
+        attack: True
+        main_interaction:
+          from: "0x0cFC28d16d07219249c6D6d6AE24E7132EE4CaA7"
+          from_type: user
+          to: "0xe6b3d9dffb9bb25e8f5ca57a2b6781f4ef600cc3"
+          to_type: other_account
+        internal_txs:
+          - from: "0xe6b3d9dffb9bb25e8f5ca57a2b6781f4ef600cc3"
+            from_type: other_account
+            to: "0xdAC6EA96c440FE6050C2453E5956b264f88eeC6a"
+            to_type: router
+          - from: "0xe6b3d9dffb9bb25e8f5ca57a2b6781f4ef600cc3"
+            from_type: other_account
+            to: "0xdAC6EA96c440FE6050C2453E5956b264f88eeC6a"
+            to_type: router
+          - from: "0xdAC6EA96c440FE6050C2453E5956b264f88eeC6a"
+            from_type: router
+            to: "0x19Ae49B9F38dD836317363839A5f6bfBFA7e319A"
+            to_type: token
+        events:
+          - emitted_by: "0x19Ae49B9F38dD836317363839A5f6bfBFA7e319A"
+            emitter_type: token
+            event_signature: "event Transfer (address indexed from, address indexed to, uint256 value)"
+            event_type: transfer
+            num_args: 3
+            input: "0x00000000000000000000000000000000000000000000000006794e5ebb3b9010"
+            relations:
+              - from: "0xdAC6EA96c440FE6050C2453E5956b264f88eeC6a"
+                from_type: router
+                to: "0x0cFC28d16d07219249c6D6d6AE24E7132EE4CaA7"
+                to_type: user
+                relation_type: token_transfer
+            value: 466490205184692240
+            token_symbol: "STC"
+            token_decimals: 9
+          - emitted_by: "0xdAC6EA96c440FE6050C2453E5956b264f88eeC6a"
+            emitter_type: router
+            event_signature: "event TokenWithdrawn (index_topic_1 address user, index_topic_2 address receiver, uint256 amount)"
+            event_type: withdrawal_confirmation
+            num_args: 3
+            input: "0x00000000000000000000000000000000000000000000000006794e5ebb3b9010"
+            value: 466490205184692240
+            token_symbol: "STC"
+            token_decimals: 9
+            token_address: "0x19Ae49B9F38dD836317363839A5f6bfBFA7e319A"
+
+      - tx_hash: "0xb867c33519664512ae2a4eaffe671415dfd29c3b07bf14b31a59f5a170348ee6"
+        block_number: 38133996 # int
+        timestamp: 1713943639 # int
+        attack: True
+        main_interaction:
+          from: "0x0cFC28d16d07219249c6D6d6AE24E7132EE4CaA7"
+          from_type: user
+          to: "0xe6b3d9dffb9bb25e8f5ca57a2b6781f4ef600cc3"
+          to_type: other_account
+        internal_txs:
+          - from: "0xe6b3d9dffb9bb25e8f5ca57a2b6781f4ef600cc3"
+            from_type: other_account
+            to: "0xdAC6EA96c440FE6050C2453E5956b264f88eeC6a"
+            to_type: router
+          - from: "0xe6b3d9dffb9bb25e8f5ca57a2b6781f4ef600cc3"
+            from_type: other_account
+            to: "0xdAC6EA96c440FE6050C2453E5956b264f88eeC6a"
+            to_type: router
+          - from: "0xdAC6EA96c440FE6050C2453E5956b264f88eeC6a"
+            from_type: router
+            to: "0xEE8ed80Bb013325EA63df19233aAe584e94F3826"
+            to_type: token
+        events:
+          - emitted_by: "0xEE8ed80Bb013325EA63df19233aAe584e94F3826"
+            emitter_type: token
+            event_signature: "event Transfer (address indexed from, address indexed to, uint256 value)"
+            event_type: transfer
+            num_args: 3
+            input: "0x0000000000000000000000000000000000000000000000000718f1e5e2f321ea"
+            relations:
+              - from: "0xdAC6EA96c440FE6050C2453E5956b264f88eeC6a"
+                from_type: router
+                to: "0x0cFC28d16d07219249c6D6d6AE24E7132EE4CaA7"
+                to_type: user
+                relation_type: token_transfer
+            value: 511424527363940842
+            token_symbol: "SRLTY"
+            token_decimals: 9
+          - emitted_by: "0xdAC6EA96c440FE6050C2453E5956b264f88eeC6a"
+            emitter_type: router
+            event_signature: "event TokenWithdrawn (index_topic_1 address user, index_topic_2 address receiver, uint256 amount)"
+            event_type: withdrawal_confirmation
+            num_args: 3
+            input: "0x0000000000000000000000000000000000000000000000000718f1e5e2f321ea"
+            value: 511424527363940842
+            token_symbol: "SRLTY"
+            token_decimals: 9
+            token_address: "0xEE8ed80Bb013325EA63df19233aAe584e94F3826"
+
+      - tx_hash: "0xae5e6bd9326ae2998291698154318a55fb68c31ab51026bbb17a4400f6be40e0"
+        block_number: 38134008 # int
+        timestamp: 1713943675 # int
+        attack: True
+        main_interaction:
+          from: "0x0cFC28d16d07219249c6D6d6AE24E7132EE4CaA7"
+          from_type: user
+          to: "0xe6b3d9dffb9bb25e8f5ca57a2b6781f4ef600cc3"
+          to_type: other_account
+        internal_txs:
+          - from: "0xe6b3d9dffb9bb25e8f5ca57a2b6781f4ef600cc3"
+            from_type: other_account
+            to: "0xdAC6EA96c440FE6050C2453E5956b264f88eeC6a"
+            to_type: router
+          - from: "0xe6b3d9dffb9bb25e8f5ca57a2b6781f4ef600cc3"
+            from_type: other_account
+            to: "0xdAC6EA96c440FE6050C2453E5956b264f88eeC6a"
+            to_type: router
+          - from: "0xdAC6EA96c440FE6050C2453E5956b264f88eeC6a"
+            from_type: router
+            to: "0x5B8650Cd999B23cF39Ab12e3213fbC8709c7f5CB"
+            to_type: token
+        events:
+          - emitted_by: "0x5B8650Cd999B23cF39Ab12e3213fbC8709c7f5CB"
+            emitter_type: token
+            event_signature: "event Transfer (address indexed from, address indexed to, uint256 value)"
+            event_type: transfer
+            num_args: 3
+            input: "0x000000000000000000000000000000000000000000093c48e044b374bef5f3e0"
+            relations:
+              - from: "0xdAC6EA96c440FE6050C2453E5956b264f88eeC6a"
+                from_type: router
+                to: "0x0cFC28d16d07219249c6D6d6AE24E7132EE4CaA7"
+                to_type: user
+                relation_type: token_transfer
+            value: 11165018691315825286444000
+            token_symbol: "Mazi"
+            token_decimals: 18
+          - emitted_by: "0xdAC6EA96c440FE6050C2453E5956b264f88eeC6a"
+            emitter_type: router
+            event_signature: "event TokenWithdrawn (index_topic_1 address user, index_topic_2 address receiver, uint256 amount)"
+            event_type: withdrawal_confirmation
+            num_args: 3
+            input: "0x000000000000000000000000000000000000000000093c48e044b374bef5f3e0"
+            value: 11165018691315825286444000
+            token_symbol: "Mazi"
+            token_decimals: 18
+            token_address: "0x5B8650Cd999B23cF39Ab12e3213fbC8709c7f5CB"

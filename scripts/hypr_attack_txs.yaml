@@ -1,0 +1,404 @@
+bridge: hypr
+replace_router_address_with: "__HYPR_BRIDGE_ROUTER__"
+blockchains:
+  - blockchain: ethereum
+    txs:
+      - tx_hash: "0x51ce3d9cfc85c1f6a532b908bb2debb16c7569eb8b76effe614016aac6635f65"
+        block_number: 18774585 # int
+        timestamp: 1702438235 # int
+        attack: True
+        main_interaction:
+          from: "0x3Ea6BA6d3415E4DFD380516c799aAfa94e420519"
+          from_type: other_account
+          to: "0xbA6fA6e8500cD8eEDa8EbB9DFbCC554fF4A3EB77"
+          to_type: other_account
+        internal_txs:
+          - from: "0xba6fa6e8500cd8eeda8ebb9dfbcc554ff4a3eb77" # initialize()
+            from_type: other_account
+            to: "0x40c31236b228935b0329eff066b1ad96e319595e"
+            to_type: router
+          - from: "0xba6fa6e8500cd8eeda8ebb9dfbcc554ff4a3eb77" # finalizeErc20Withdrawal()
+            from_type: other_account
+            to: "0x40c31236b228935b0329eff066b1ad96e319595e"
+            to_type: router
+          - from: "0x40c31236b228935b0329eff066b1ad96e319595e" # transfer()
+            from_type: router
+            to: "0x31adda225642a8f4d7e90d4152be6661ab22a5a2"
+            to_type: token
+          - from: "0xba6fa6e8500cd8eeda8ebb9dfbcc554ff4a3eb77" # balanceOf()
+            from_type: other_account
+            to: "0x31adda225642a8f4d7e90d4152be6661ab22a5a2"
+            to_type: token
+        events:
+          - emitted_by: "0x40c31236b228935b0329eff066b1ad96e319595e"
+            emitter_type: router
+            event_signature: "event Initialized (uint8 version)"
+            num_args: 1
+            input: "0x0000000000000000000000000000000000000000000000000000000000000002"
+          - emitted_by: "0x31aDdA225642a8f4D7e90d4152BE6661ab22a5a2"
+            emitter_type: token
+            event_signature: "event Transfer (address indexed from, address indexed to, uint256 value)"
+            event_type: transfer
+            num_args: 3
+            input: "0x000000000000000000000000000000000000000000022037faaa846cf2400000"
+            relations:
+              - from: "0x40C31236B228935b0329eFF066B1AD96e319595e"
+                from_type: router
+                to: "0x5b8D598B354f5760B2a65F492154e7a3DF46D1BE"
+                to_type: user
+                relation_type: token_transfer
+            value: 2570000000000000000000000
+            token_symbol: "HYPR"
+            token_decimals: 18
+          - emitted_by: "0x40C31236B228935b0329eFF066B1AD96e319595e"
+            emitter_type: router
+            event_signature: "event ERC20WithdrawalFinalized (index_topic_1 address _l1Token, index_topic_2 address _l2Token, index_topic_3 address _from, address _to, uint256 _amount, bytes _data)"
+            event_type: withdrawal_confirmation
+            num_args: 6
+            input: "0x0000000000000000000000005b8d598b354f5760b2a65f492154e7a3df46d1be000000000000000000000000000000000000000000022037faaa846cf240000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000"
+            value: 2570000000000000000000000
+            token_symbol: "HYPR"
+            token_decimals: 18
+            token_address: "0x31aDdA225642a8f4D7e90d4152BE6661ab22a5a2"
+          - emitted_by: "0x40C31236B228935b0329eFF066B1AD96e319595e"
+            emitter_type: router
+            event_signature: "event ERC20BridgeFinalized (index_topic_1 address localToken, index_topic_2 address remoteToken, index_topic_3 address from, address to, uint256 amount, bytes extraData)"
+            event_type: operation_finalized
+            num_args: 6
+            input: "0x0000000000000000000000005b8d598b354f5760b2a65f492154e7a3df46d1be000000000000000000000000000000000000000000022037faaa846cf240000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000"
+            value: 2570000000000000000000000
+            token_symbol: "HYPR"
+            token_decimals: 18
+            token_address: "0x31aDdA225642a8f4D7e90d4152BE6661ab22a5a2"
+
+      - tx_hash: "0x8cd84280bb3b46bb6f622e0269296ebccb6055c7f2ee7b0323214120b78d878d"
+        block_number: 18764317 # int
+        timestamp: 1702314047 # int
+        main_interaction:
+          from: "0x6Af5C776186DfAFA2c239d92d8cDB007b2eeCf3c"
+          from_type: user
+          to: "0x40C31236B228935b0329eFF066B1AD96e319595e"
+          to_type: router
+          value: 1000000000000000
+          input: "0x"
+          token_symbol: "ETH"
+          token_decimals: 18
+        internal_txs:
+          - from: "0x40c31236b228935b0329eff066b1ad96e319595e"
+            from_type: router
+            to: "0xf0e9a593d3b252511adfb5ea16ebf0a0450b2a11"
+            to_type: router
+            value: 1000000000000000
+            input: "0x"
+            token_symbol: "ETH"
+            token_decimals: 18
+          - from: "0xf0e9a593d3b252511adfb5ea16ebf0a0450b2a11" # finalizeErc20Withdrawal()
+            from_type: router
+            to: "0x762fd49dd06b3b127bc10abdcba35ff587f80dfb"
+            to_type: router
+            value: 1000000000000000
+            input: "0x"
+            token_symbol: "ETH"
+            token_decimals: 18
+        events:
+          - emitted_by: "0x40c31236b228935b0329eff066b1ad96e319595e"
+            emitter_type: router
+            event_signature: "event ETHDepositInitiated (index_topic_1 address _from, index_topic_2 address _to, uint256 _amount, bytes _data)"
+            event_type: deposit_request
+            num_args: 4
+            input: "0x00000000000000000000000000000000000000000000000000038d7ea4c6800000000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000"
+            value: 1000000000000000
+            token_symbol: "ETH"
+            token_decimals: 18
+            token_address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+          - emitted_by: "0x40c31236b228935b0329eff066b1ad96e319595e"
+            emitter_type: router
+            event_signature: "event ETHBridgeInitiated (index_topic_1 address from, index_topic_2 address to, uint256 amount, bytes extraData)"
+            event_type: deposit_request
+            num_args: 4
+            input: "0x00000000000000000000000000000000000000000000000000038d7ea4c6800000000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000"
+            relations:
+              - to: "token_native"
+                to_type: token
+                relation_type: function_call
+            value: 1000000000000000
+            token_symbol: "ETH"
+            token_decimals: 18
+            token_address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+          - emitted_by: "0x762Fd49DD06b3B127BC10ABDCBa35FF587f80DFB"
+            emitter_type: router
+            event_signature: "event TransactionDeposited (index_topic_1 address from, index_topic_2 address to, index_topic_3 uint256 version, bytes opaqueData)"
+            num_args: 4
+            input: "0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000001ed00000000000000000000000000000000000000000000000000038d7ea4c6800000000000000000000000000000000000000000000000000000038d7ea4c680000000000000077d2e00d764ad0b000100000000000000000000000000000000000000000000000000000000000300000000000000000000000040c31236b228935b0329eff066b1ad96e319595e000000000000000000000000420000000000000000000000000000000000001000000000000000000000000000000000000000000000000000038d7ea4c680000000000000000000000000000000000000000000000000000000000000030d4000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000a41635f5fd0000000000000000000000006af5c776186dfafa2c239d92d8cdb007b2eecf3c0000000000000000000000006af5c776186dfafa2c239d92d8cdb007b2eecf3c00000000000000000000000000000000000000000000000000038d7ea4c68000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          - emitted_by: "0xf0e9A593D3b252511adfB5eA16EBF0a0450b2A11"
+            emitter_type: router
+            event_signature: "event SentMessage (index_topic_1 address target, address sender, bytes message, uint256 messageNonce, uint256 gasLimit)"
+            event_type: operation_request_signing
+            num_args: 4
+            input: "0x00000000000000000000000040c31236b228935b0329eff066b1ad96e319595e000000000000000000000000000000000000000000000000000000000000008000010000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000030d4000000000000000000000000000000000000000000000000000000000000000a41635f5fd0000000000000000000000006af5c776186dfafa2c239d92d8cdb007b2eecf3c0000000000000000000000006af5c776186dfafa2c239d92d8cdb007b2eecf3c00000000000000000000000000000000000000000000000000038d7ea4c680000000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          - emitted_by: "0xf0e9A593D3b252511adfB5eA16EBF0a0450b2A11"
+            emitter_type: router
+            event_signature: "event SentMessageExtension1 (index_topic_1 address sender, uint256 value)"
+            event_type: operation_request_signing
+            num_args: 2
+            input: "0x00000000000000000000000000000000000000000000000000038d7ea4c68000"
+
+      - tx_hash: "0x1e7e38e76039f4964c1cb8f7163c82b1e2dd86d3ceeb41d93213b29d830e2b85"
+        block_number: 18772860 # int
+        timestamp: 1702417427 # int
+        main_interaction:
+          from: "0x2Ce9fDAD7142b9cD07603bB5fA634AB25C069ADF"
+          from_type: user
+          to: "0x40C31236B228935b0329eFF066B1AD96e319595e"
+          to_type: router
+          value: 10000000000000000
+          input: "0x"
+          token_symbol: "ETH"
+          token_decimals: 18
+        internal_txs:
+          - from: "0x40c31236b228935b0329eff066b1ad96e319595e"
+            from_type: router
+            to: "0xf0e9a593d3b252511adfb5ea16ebf0a0450b2a11"
+            to_type: router
+            value: 10000000000000000
+            input: "0x"
+            token_symbol: "ETH"
+            token_decimals: 18
+          - from: "0xf0e9a593d3b252511adfb5ea16ebf0a0450b2a11" # finalizeErc20Withdrawal()
+            from_type: router
+            to: "0x762fd49dd06b3b127bc10abdcba35ff587f80dfb"
+            to_type: router
+            value: 10000000000000000
+            input: "0x"
+            token_symbol: "ETH"
+            token_decimals: 18
+        events:
+          - emitted_by: "0x40c31236b228935b0329eff066b1ad96e319595e"
+            emitter_type: router
+            event_signature: "event ETHDepositInitiated (index_topic_1 address _from, index_topic_2 address _to, uint256 _amount, bytes _data)"
+            event_type: deposit_request
+            num_args: 4
+            input: "0x000000000000000000000000000000000000000000000000002386f26fc1000000000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000"
+            value: 10000000000000000
+            token_symbol: "ETH"
+            token_decimals: 18
+            token_address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+          - emitted_by: "0x40c31236b228935b0329eff066b1ad96e319595e"
+            emitter_type: router
+            event_signature: "event ETHBridgeInitiated (index_topic_1 address from, index_topic_2 address to, uint256 amount, bytes extraData)"
+            event_type: deposit_request
+            num_args: 4
+            input: "0x000000000000000000000000000000000000000000000000002386f26fc1000000000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000"
+            relations:
+              - to: "token_native"
+                to_type: token
+                relation_type: function_call
+            value: 10000000000000000
+            token_symbol: "ETH"
+            token_decimals: 18
+            token_address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+          - emitted_by: "0x762Fd49DD06b3B127BC10ABDCBa35FF587f80DFB"
+            emitter_type: router
+            event_signature: "event TransactionDeposited (index_topic_1 address from, index_topic_2 address to, index_topic_3 uint256 version, bytes opaqueData)"
+            num_args: 4
+            input: "0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000001ed000000000000000000000000000000000000000000000000002386f26fc10000000000000000000000000000000000000000000000000000002386f26fc100000000000000077d2e00d764ad0b000100000000000000000000000000000000000000000000000000000000000600000000000000000000000040c31236b228935b0329eff066b1ad96e319595e0000000000000000000000004200000000000000000000000000000000000010000000000000000000000000000000000000000000000000002386f26fc100000000000000000000000000000000000000000000000000000000000000030d4000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000a41635f5fd0000000000000000000000002ce9fdad7142b9cd07603bb5fa634ab25c069adf0000000000000000000000002ce9fdad7142b9cd07603bb5fa634ab25c069adf000000000000000000000000000000000000000000000000002386f26fc10000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          - emitted_by: "0xf0e9A593D3b252511adfB5eA16EBF0a0450b2A11"
+            emitter_type: router
+            event_signature: "event SentMessage (index_topic_1 address target, address sender, bytes message, uint256 messageNonce, uint256 gasLimit)"
+            event_type: operation_request_signing
+            num_args: 4
+            input: "0x00000000000000000000000040c31236b228935b0329eff066b1ad96e319595e000000000000000000000000000000000000000000000000000000000000008000010000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000030d4000000000000000000000000000000000000000000000000000000000000000a41635f5fd0000000000000000000000002ce9fdad7142b9cd07603bb5fa634ab25c069adf0000000000000000000000002ce9fdad7142b9cd07603bb5fa634ab25c069adf000000000000000000000000000000000000000000000000002386f26fc100000000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          - emitted_by: "0xf0e9A593D3b252511adfB5eA16EBF0a0450b2A11"
+            emitter_type: router
+            event_signature: "event SentMessageExtension1 (index_topic_1 address sender, uint256 value)"
+            event_type: operation_request_signing
+            num_args: 2
+            input: "0x000000000000000000000000000000000000000000000000002386f26fc10000"
+
+      - tx_hash: "0x584ee85b8213f82a689e2b3f393580b5ec452f50391f488d9137dd7d5e528ec0"
+        block_number: 18768660 # int
+        timestamp: 1702366607 # int
+        main_interaction:
+          from: "0x761e55273939e61726e1486d9f43f1f7AbAF4356"
+          from_type: user
+          to: "0x40C31236B228935b0329eFF066B1AD96e319595e"
+          to_type: router
+        internal_txs:
+          - from: "0x40c31236b228935b0329eff066b1ad96e319595e"
+            from_type: router
+            to: "0x31adda225642a8f4d7e90d4152be6661ab22a5a2"
+            to_type: token
+          - from: "0x40c31236b228935b0329eff066b1ad96e319595e"
+            from_type: router
+            to: "0xf0e9a593d3b252511adfb5ea16ebf0a0450b2a11"
+            to_type: router
+          - from: "0xf0e9a593d3b252511adfb5ea16ebf0a0450b2a11"
+            from_type: router
+            to: "0x762fd49dd06b3b127bc10abdcba35ff587f80dfb"
+            to_type: router
+        events:
+          - emitted_by: "0x31aDdA225642a8f4D7e90d4152BE6661ab22a5a2"
+            emitter_type: token
+            event_signature: "Approval (index_topic_1 address owner, index_topic_2 address spender, uint256 value)"
+            event_type: approval
+            num_args: 3
+            input: "0x0000000000000000000000000000000000000000000000000000000000000000"
+            relations:
+              - from: "0x761e55273939e61726e1486d9f43f1f7AbAF4356"
+                from_type: user
+                to: "0x40C31236B228935b0329eFF066B1AD96e319595e"
+                to_type: router
+                relation_type: token_auth
+            value: 0
+            token_symbol: "HYPR"
+            token_decimals: 18
+          - emitted_by: "0x31aDdA225642a8f4D7e90d4152BE6661ab22a5a2"
+            emitter_type: token
+            event_signature: "event Transfer (address indexed from, address indexed to, uint256 value)"
+            event_type: transfer
+            num_args: 3
+            input: "0x0000000000000000000000000000000000000000000000000de0b6b3a7640000"
+            relations:
+              - from: "0x761e55273939e61726e1486d9f43f1f7AbAF4356"
+                from_type: user
+                to: "0x40C31236B228935b0329eFF066B1AD96e319595e"
+                to_type: router
+                relation_type: token_transfer
+            value: 1000000000000000000
+            token_symbol: "HYPR"
+            token_decimals: 18
+          - emitted_by: "0x40c31236b228935b0329eff066b1ad96e319595e"
+            emitter_type: router
+            event_signature: "event ERC20DepositInitiated (index_topic_1 address _l1Token, index_topic_2 address _l2Token, index_topic_3 address _from, address _to, uint256 _amount, bytes _data)"
+            event_type: deposit_request
+            num_args: 6
+            input: "0x000000000000000000000000761e55273939e61726e1486d9f43f1f7abaf43560000000000000000000000000000000000000000000000000de0b6b3a764000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000"
+            value: 1000000000000000000
+            token_symbol: "HYPR"
+            token_decimals: 18
+            token_address: "0x31aDdA225642a8f4D7e90d4152BE6661ab22a5a2"
+          - emitted_by: "0x40c31236b228935b0329eff066b1ad96e319595e"
+            emitter_type: router
+            event_signature: "event ERC20BridgeInitiated (index_topic_1 address localToken, index_topic_2 address remoteToken, index_topic_3 address from, address to, uint256 amount, bytes extraData)"
+            event_type: deposit_request
+            num_args: 6
+            input: "0x000000000000000000000000761e55273939e61726e1486d9f43f1f7abaf43560000000000000000000000000000000000000000000000000de0b6b3a764000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000"
+            relations:
+              - to: "0x31aDdA225642a8f4D7e90d4152BE6661ab22a5a2"
+                to_type: token
+                relation_type: function_call
+            value: 1000000000000000000
+            token_symbol: "HYPR"
+            token_decimals: 18
+            token_address: "0x31aDdA225642a8f4D7e90d4152BE6661ab22a5a2"
+          - emitted_by: "0x762Fd49DD06b3B127BC10ABDCBa35FF587f80DFB"
+            emitter_type: router
+            event_signature: "event TransactionDeposited (index_topic_1 address from, index_topic_2 address to, index_topic_3 uint256 version, bytes opaqueData)"
+            num_args: 4
+            input: "0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000022d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007812e00d764ad0b000100000000000000000000000000000000000000000000000000000000000500000000000000000000000040c31236b228935b0329eff066b1ad96e319595e000000000000000000000000420000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030d4000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000e40166a07a000000000000000000000000d7a421a6786cf4951a8fae10385680222d63f89a00000000000000000000000031adda225642a8f4d7e90d4152be6661ab22a5a2000000000000000000000000761e55273939e61726e1486d9f43f1f7abaf4356000000000000000000000000761e55273939e61726e1486d9f43f1f7abaf43560000000000000000000000000000000000000000000000000de0b6b3a764000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          - emitted_by: "0xf0e9A593D3b252511adfB5eA16EBF0a0450b2A11"
+            emitter_type: router
+            event_signature: "event SentMessage (index_topic_1 address target, address sender, bytes message, uint256 messageNonce, uint256 gasLimit)"
+            event_type: operation_request_signing
+            num_args: 4
+            input: "0x00000000000000000000000040c31236b228935b0329eff066b1ad96e319595e000000000000000000000000000000000000000000000000000000000000008000010000000000000000000000000000000000000000000000000000000000050000000000000000000000000000000000000000000000000000000000030d4000000000000000000000000000000000000000000000000000000000000000e40166a07a000000000000000000000000d7a421a6786cf4951a8fae10385680222d63f89a00000000000000000000000031adda225642a8f4d7e90d4152be6661ab22a5a2000000000000000000000000761e55273939e61726e1486d9f43f1f7abaf4356000000000000000000000000761e55273939e61726e1486d9f43f1f7abaf43560000000000000000000000000000000000000000000000000de0b6b3a764000000000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          - emitted_by: "0xf0e9A593D3b252511adfB5eA16EBF0a0450b2A11"
+            emitter_type: router
+            event_signature: "event SentMessageExtension1 (index_topic_1 address sender, uint256 value)"
+            event_type: operation_request_signing
+            num_args: 2
+            input: "0x0000000000000000000000000000000000000000000000000000000000000000"
+
+      - tx_hash: "0xa7ad8bbe04039a25e5b05a674ae2b6ef620b6f360929cf8e88c22c3ccb565140"
+        block_number: 18772940 # int
+        timestamp: 1702418387 # int
+        main_interaction:
+          from: "0x88bf5A2E82510847E5dcBF33F44A9F611F1C1dF5"
+          from_type: user
+          to: "0x40C31236B228935b0329eFF066B1AD96e319595e"
+          to_type: router
+        internal_txs:
+          - from: "0x40c31236b228935b0329eff066b1ad96e319595e"
+            from_type: router
+            to: "0x31adda225642a8f4d7e90d4152be6661ab22a5a2"
+            to_type: token
+          - from: "0x40c31236b228935b0329eff066b1ad96e319595e"
+            from_type: router
+            to: "0xf0e9a593d3b252511adfb5ea16ebf0a0450b2a11"
+            to_type: router
+          - from: "0xf0e9a593d3b252511adfb5ea16ebf0a0450b2a11"
+            from_type: router
+            to: "0x762fd49dd06b3b127bc10abdcba35ff587f80dfb"
+            to_type: router
+        events:
+          - emitted_by: "0x31aDdA225642a8f4D7e90d4152BE6661ab22a5a2"
+            emitter_type: token
+            event_signature: "Approval (index_topic_1 address owner, index_topic_2 address spender, uint256 value)"
+            event_type: approval
+            num_args: 3
+            input: "0x0000000000000000000000000000000000000000000000000000000000000000"
+            relations:
+              - from: "0x88bf5A2E82510847E5dcBF33F44A9F611F1C1dF5"
+                from_type: user
+                to: "0x40C31236B228935b0329eFF066B1AD96e319595e"
+                to_type: router
+                relation_type: token_auth
+            value: 0
+            token_symbol: "HYPR"
+            token_decimals: 18
+          - emitted_by: "0x31aDdA225642a8f4D7e90d4152BE6661ab22a5a2"
+            emitter_type: token
+            event_signature: "event Transfer (address indexed from, address indexed to, uint256 value)"
+            event_type: transfer
+            num_args: 3
+            input: "0x000000000000000000000000000000000000000000000ed2b525841adfc00000"
+            relations:
+              - from: "0x88bf5A2E82510847E5dcBF33F44A9F611F1C1dF5"
+                from_type: user
+                to: "0x40C31236B228935b0329eFF066B1AD96e319595e"
+                to_type: router
+                relation_type: token_transfer
+            value: 70000000000000000000000
+            token_symbol: "HYPR"
+            token_decimals: 18
+          - emitted_by: "0x40c31236b228935b0329eff066b1ad96e319595e"
+            emitter_type: router
+            event_signature: "event ERC20DepositInitiated (index_topic_1 address _l1Token, index_topic_2 address _l2Token, index_topic_3 address _from, address _to, uint256 _amount, bytes _data)"
+            event_type: deposit_request
+            num_args: 6
+            input: "0x00000000000000000000000088bf5a2e82510847e5dcbf33f44a9f611f1c1df5000000000000000000000000000000000000000000000ed2b525841adfc0000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000"
+            value: 70000000000000000000000
+            token_symbol: "HYPR"
+            token_decimals: 18
+            token_address: "0x31aDdA225642a8f4D7e90d4152BE6661ab22a5a2"
+          - emitted_by: "0x40c31236b228935b0329eff066b1ad96e319595e"
+            emitter_type: router
+            event_signature: "event ERC20BridgeInitiated (index_topic_1 address localToken, index_topic_2 address remoteToken, index_topic_3 address from, address to, uint256 amount, bytes extraData)"
+            event_type: deposit_request
+            num_args: 6
+            input: "0x00000000000000000000000088bf5a2e82510847e5dcbf33f44a9f611f1c1df5000000000000000000000000000000000000000000000ed2b525841adfc0000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000"
+            relations:
+              - to: "0x31aDdA225642a8f4D7e90d4152BE6661ab22a5a2"
+                to_type: token
+                relation_type: function_call
+            value: 70000000000000000000000
+            token_symbol: "HYPR"
+            token_decimals: 18
+            token_address: "0x31aDdA225642a8f4D7e90d4152BE6661ab22a5a2"
+          - emitted_by: "0x762Fd49DD06b3B127BC10ABDCBa35FF587f80DFB"
+            emitter_type: router
+            event_signature: "event TransactionDeposited (index_topic_1 address from, index_topic_2 address to, index_topic_3 uint256 version, bytes opaqueData)"
+            num_args: 4
+            input: "0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000022d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007812e00d764ad0b000100000000000000000000000000000000000000000000000000000000000800000000000000000000000040c31236b228935b0329eff066b1ad96e319595e000000000000000000000000420000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030d4000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000e40166a07a000000000000000000000000d7a421a6786cf4951a8fae10385680222d63f89a00000000000000000000000031adda225642a8f4d7e90d4152be6661ab22a5a200000000000000000000000088bf5a2e82510847e5dcbf33f44a9f611f1c1df500000000000000000000000088bf5a2e82510847e5dcbf33f44a9f611f1c1df5000000000000000000000000000000000000000000000ed2b525841adfc0000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          - emitted_by: "0xf0e9A593D3b252511adfB5eA16EBF0a0450b2A11"
+            emitter_type: router
+            event_signature: "event SentMessage (index_topic_1 address target, address sender, bytes message, uint256 messageNonce, uint256 gasLimit)"
+            event_type: operation_request_signing
+            num_args: 4
+            input: "0x00000000000000000000000040c31236b228935b0329eff066b1ad96e319595e000000000000000000000000000000000000000000000000000000000000008000010000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000030d4000000000000000000000000000000000000000000000000000000000000000e40166a07a000000000000000000000000d7a421a6786cf4951a8fae10385680222d63f89a00000000000000000000000031adda225642a8f4d7e90d4152be6661ab22a5a200000000000000000000000088bf5a2e82510847e5dcbf33f44a9f611f1c1df500000000000000000000000088bf5a2e82510847e5dcbf33f44a9f611f1c1df5000000000000000000000000000000000000000000000ed2b525841adfc0000000000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          - emitted_by: "0xf0e9A593D3b252511adfB5eA16EBF0a0450b2A11"
+            emitter_type: router
+            event_signature: "event SentMessageExtension1 (index_topic_1 address sender, uint256 value)"
+            event_type: operation_request_signing
+            num_args: 2
+            input: "0x0000000000000000000000000000000000000000000000000000000000000000"
