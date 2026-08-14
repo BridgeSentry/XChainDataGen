@@ -1,3 +1,4 @@
+import csv
 import importlib
 import json
 import logging
@@ -320,6 +321,16 @@ def build_log_message_generator(bridge: Bridge, message: str = ""):
     message = f"{datetime.now()} - INFO - {bridge.value} - {message}"
 
     return message
+
+
+def append_csv_row(path: str, fieldnames: list, row: dict):
+    file_exists = os.path.isfile(path)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "a", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        if not file_exists:
+            writer.writeheader()
+        writer.writerow(row)
 
 
 def load_module(module_name: str):

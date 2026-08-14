@@ -10,6 +10,7 @@ from config.constants import (
     MAX_NUM_THREADS_EXTRACTOR,
     RPCS_CONFIG_FILE,
 )
+from utils.timing import io_timer
 from utils.utils import CustomException, load_solana_api_key, log_error
 
 
@@ -74,68 +75,69 @@ class RPCClient(ABC):
         func_name = "make_request"
         num_rpcs = self.rpc_sizes[blockchain_name]
 
-        try:
-            backoff = 1
-            while True:
-                tried_rpcs = {}
-                while len(tried_rpcs) < num_rpcs:
-                    payload = {
-                        "id": 1,
-                        "jsonrpc": "2.0",
-                        "method": method,
-                        "params": params,
-                    }
-
-                    if blockchain_name == "solana":
-                        headers = {
-                            "Content-Type": "application/json",
-                            "Accept": "application/json",
-                            "Authorization": f"Bearer {load_solana_api_key()}",
+        with io_timer.track("rpc"):
+            try:
+                backoff = 1
+                while True:
+                    tried_rpcs = {}
+                    while len(tried_rpcs) < num_rpcs:
+                        payload = {
+                            "id": 1,
+                            "jsonrpc": "2.0",
+                            "method": method,
+                            "params": params,
                         }
-                    else:
-                        headers = {
-                            "Content-Type": "application/json",
-                            "Accept": "application/json",
-                        }
-                    try:
-                        response = requests.post(rpc_url, json=payload, headers=headers, timeout=10)
-                        response.raise_for_status()
 
-                        if response.json() is None or response.json()["result"] is None:
-                            raise Exception()
+                        if blockchain_name == "solana":
+                            headers = {
+                                "Content-Type": "application/json",
+                                "Accept": "application/json",
+                                "Authorization": f"Bearer {load_solana_api_key()}",
+                            }
+                        else:
+                            headers = {
+                                "Content-Type": "application/json",
+                                "Accept": "application/json",
+                            }
+                        try:
+                            response = requests.post(rpc_url, json=payload, headers=headers, timeout=10)
+                            response.raise_for_status()
 
-                        return response.json()
-                    except Exception as e:
-                        tried_rpcs[rpc_url] = e
-                        rpc_url = self.get_next_rpc(blockchain_name)
-                        # ignore the exception and try the next RPC endpoint
-                        pass
+                            if response.json() is None or response.json()["result"] is None:
+                                raise Exception()
 
-                # if we have tried all RPC endpoints and none of them worked, back off
-                # exponentially and try again all endpoints. Only return once we have
-                # a correct response
-                if no_backoff:
-                    break
-                time.sleep(backoff)
-                log_error(
-                    self.bridge,
+                            return response.json()
+                        except Exception as e:
+                            tried_rpcs[rpc_url] = e
+                            rpc_url = self.get_next_rpc(blockchain_name)
+                            # ignore the exception and try the next RPC endpoint
+                            pass
+
+                    # if we have tried all RPC endpoints and none of them worked, back off
+                    # exponentially and try again all endpoints. Only return once we have
+                    # a correct response
+                    if no_backoff:
+                        break
+                    time.sleep(backoff)
+                    log_error(
+                        self.bridge,
+                        (
+                            f"Failed to make RPC request to {blockchain_name}, method {method}, "
+                            f"params {params}. Tried RPCs: {tried_rpcs}. Retrying with backoff ",
+                            f"{backoff} seconds.",
+                        ),
+                    )
+                    backoff = (backoff * 2) if backoff < 30 else 30
+
+            except Exception as e:
+                raise CustomException(
+                    self.CLASS_NAME,
+                    func_name,
                     (
                         f"Failed to make RPC request to {blockchain_name}, method {method}, "
-                        f"params {params}. Tried RPCs: {tried_rpcs}. Retrying with backoff ",
-                        f"{backoff} seconds.",
+                        f"params {params}. Error: {e}"
                     ),
-                )
-                backoff = (backoff * 2) if backoff < 30 else 30
-
-        except Exception as e:
-            raise CustomException(
-                self.CLASS_NAME,
-                func_name,
-                (
-                    f"Failed to make RPC request to {blockchain_name}, method {method}, "
-                    f"params {params}. Error: {e}"
-                ),
-            ) from e
+                ) from e
 
     @staticmethod
     def plain_request(rpc, method, params):

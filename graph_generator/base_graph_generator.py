@@ -1,9 +1,12 @@
 import csv
 import os
+import time
 from abc import ABC, abstractmethod
+from datetime import datetime
 
 from config.constants import (
     BLOCKCHAIN_IDS,
+    GRAPH_GENERATION_TIMING_CSV,
     TRACE_TRANSACTION_SUPPORTED_BLOCKCHAINS,
     Bridge,
 )
@@ -33,7 +36,8 @@ from repository.graphs.repository import (
     GraphNodeRepository,
 )
 from rpcs.evm_rpc_client import EvmRPCClient
-from utils.utils import CliColor, log_to_cli
+from utils.timing import io_timer
+from utils.utils import CliColor, append_csv_row, log_to_cli
 
 
 class BaseGraphGenerator(ABC):
@@ -121,6 +125,8 @@ class BaseGraphGenerator(ABC):
         self.internal_tx_to_query_dune = []
         self._dune_traces_by_tx = None
         self.pricing.reset()
+        io_timer.reset()
+        run_start = time.perf_counter()
 
         txs = list(self.fetch_transactions_for_blockchain(blockchain, start_ts, end_ts))
 
@@ -164,6 +170,42 @@ class BaseGraphGenerator(ABC):
 
         if self.dune_client is not None:
             self.pricing.batch_resolve_pending(self.graph_node_repo)
+
+        total = time.perf_counter() - run_start
+        rpc_time = io_timer.total("rpc")
+        pricing_time = io_timer.total("pricing")
+        compute_time = total - rpc_time - pricing_time
+        num_txs = len(txs)
+        compute_tx_per_sec = (num_txs / compute_time) if compute_time > 0 else 0.0
+
+        log_to_cli(
+            f"[{blockchain}] Graph generation timing — total {total:.2f}s | "
+            f"rpc {rpc_time:.2f}s ({io_timer.count('rpc')} calls) | "
+            f"pricing {pricing_time:.2f}s ({io_timer.count('pricing')} calls) | "
+            f"compute {compute_time:.2f}s | {num_txs} txs | {compute_tx_per_sec:.2f} tx/s compute",
+            CliColor.SUCCESS,
+        )
+        append_csv_row(
+            GRAPH_GENERATION_TIMING_CSV,
+            [
+                "timestamp", "bridge", "blockchain", "num_transactions",
+                "total_seconds", "rpc_seconds", "rpc_calls",
+                "pricing_seconds", "pricing_calls", "compute_seconds", "compute_tx_per_sec",
+            ],
+            {
+                "timestamp": datetime.now().isoformat(),
+                "bridge": self.bridge.value,
+                "blockchain": blockchain,
+                "num_transactions": num_txs,
+                "total_seconds": total,
+                "rpc_seconds": rpc_time,
+                "rpc_calls": io_timer.count("rpc"),
+                "pricing_seconds": pricing_time,
+                "pricing_calls": io_timer.count("pricing"),
+                "compute_seconds": compute_time,
+                "compute_tx_per_sec": compute_tx_per_sec,
+            },
+        )
 
     def process_partial_transaction(self, tx: BlockchainTransaction):
         if self.blockchain_graph_mapping_repo.graph_exists(self.bridge.value, tx.blockchain, tx.transaction_hash) is not None:

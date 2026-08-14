@@ -156,3 +156,5 @@ BRIDGE_NEEDS_TRANSACTION_BY_HASH_RPC_METHOD = {
 RPCS_CONFIG_FILE = "config/rpcs_config.yaml"
 
 MAX_NUM_THREADS_EXTRACTOR = 10
+
+GRAPH_GENERATION_TIMING_CSV = "out/graph_generation_timing.csv"
