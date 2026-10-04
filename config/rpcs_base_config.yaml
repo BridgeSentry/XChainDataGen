@@ -71,6 +71,12 @@ blockchains:
   - "https://0xrpc.io/eth"
   - "https://eth.api.onfinality.io/public"
   - "https://eth.api.pocket.network"
+  - "https://eth1.lava.build"
+  - "https://eth.blockrazor.xyz"
+  - "https://ethereum-json-rpc.stakely.io"
+  - "https://eth-rpc.keccak.io"
+  - "https://rpc-eth.blockmachine.io"
+  - "https://rpc.fullsend.to"
 
 - name: gnosis
   contract: "0x8e5bBbb09Ed1ebdE8674Cda39A0c169401db4252"
@@ -117,12 +123,11 @@ blockchains:
   rpcs:
   - "https://rpc-mainnet.matic.quiknode.pro"
   - "https://polygon.gateway.tenderly.co"
-  # - "https://polygon-rpc.com/" # This RPC is unreliable and often down / returns inconsistent results
-  # - "https://polygon.drpc.org" # This RPC is unreliable and often down / returns inconsistent results
-  # - "https://rpc.ankr.com/polygon" # This RPC is unreliable and often down / returns inconsistent results
-  # - "https://polygon.api.onfinality.io/public" # This RPC is unreliable and often down / returns inconsistent results
-  # - "https://polygon.rpc.subquery.network/public" # This RPC is unreliable and often down / returns inconsistent results
-  # - "https://polygon.meowrpc.com" # This RPC is unreliable and often down / returns inconsistent results
+  - "https://public.1rpc.io/matic"
+  - "https://polygon-rpc.com/"
+  - "https://polygon.drpc.org"
+  - "https://rpc.ankr.com/polygon"
+  - "https://polygon.api.onfinality.io/public"
 
 - name: base
   contract: "0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2"
