@@ -49,6 +49,7 @@ class BaseGraphGenerator(ABC):
         self.offchain_anomaly_transactions = set()
         self.attacker_addresses = {}
         self._resolve_address_cache: dict[tuple, str] = {}
+        self._interval_cache: tuple[int, int] | None = None
         self.load_anomaly_data()
 
         try:
@@ -64,9 +65,14 @@ class BaseGraphGenerator(ABC):
             self.token_metadata_repo,
             self.token_price_repo,
             self.dune_client,
-            self.fetch_transactions_timestamp_interval,
+            self._cached_fetch_transactions_timestamp_interval,
         )
         self.inspector = TokenInspector(self.rpc_client, self.token_metadata_repo)
+
+    def _cached_fetch_transactions_timestamp_interval(self) -> tuple[int, int]:
+        if self._interval_cache is None:
+            self._interval_cache = self.fetch_transactions_timestamp_interval()
+        return self._interval_cache
 
     def bind_db_to_repos(self) -> None:
         self.bridge_router_metadata_repo = BridgeRoutingContractMetadataRepository(DBSession)
@@ -125,6 +131,7 @@ class BaseGraphGenerator(ABC):
         self.internal_tx_to_query_dune = []
         self._dune_traces_by_tx = None
         self.pricing.reset()
+        self._interval_cache = None
         io_timer.reset()
         run_start = time.perf_counter()
 
@@ -174,7 +181,8 @@ class BaseGraphGenerator(ABC):
         total = time.perf_counter() - run_start
         rpc_time = io_timer.total("rpc")
         pricing_time = io_timer.total("pricing")
-        compute_time = total - rpc_time - pricing_time
+        db_time = io_timer.total("db")
+        compute_time = total - rpc_time - pricing_time - db_time
         num_txs = len(txs)
         compute_tx_per_sec = (num_txs / compute_time) if compute_time > 0 else 0.0
 
@@ -182,6 +190,7 @@ class BaseGraphGenerator(ABC):
             f"[{blockchain}] Graph generation timing — total {total:.2f}s | "
             f"rpc {rpc_time:.2f}s ({io_timer.count('rpc')} calls) | "
             f"pricing {pricing_time:.2f}s ({io_timer.count('pricing')} calls) | "
+            f"db {db_time:.2f}s ({io_timer.count('db')} calls) | "
             f"compute {compute_time:.2f}s | {num_txs} txs | {compute_tx_per_sec:.2f} tx/s compute",
             CliColor.SUCCESS,
         )
@@ -190,7 +199,8 @@ class BaseGraphGenerator(ABC):
             [
                 "timestamp", "bridge", "blockchain", "num_transactions",
                 "total_seconds", "rpc_seconds", "rpc_calls",
-                "pricing_seconds", "pricing_calls", "compute_seconds", "compute_tx_per_sec",
+                "pricing_seconds", "pricing_calls", "db_seconds", "db_calls",
+                "compute_seconds", "compute_tx_per_sec",
             ],
             {
                 "timestamp": datetime.now().isoformat(),
@@ -202,16 +212,15 @@ class BaseGraphGenerator(ABC):
                 "rpc_calls": io_timer.count("rpc"),
                 "pricing_seconds": pricing_time,
                 "pricing_calls": io_timer.count("pricing"),
+                "db_seconds": db_time,
+                "db_calls": io_timer.count("db"),
                 "compute_seconds": compute_time,
                 "compute_tx_per_sec": compute_tx_per_sec,
             },
         )
 
     def process_partial_transaction(self, tx: BlockchainTransaction):
-        if self.blockchain_graph_mapping_repo.graph_exists(self.bridge.value, tx.blockchain, tx.transaction_hash) is not None:
-            return
-
-        # Create initial graph mapping and nodes for the transaction 
+        # Create initial graph mapping and nodes for the transaction
         # before processing events and traces, so that we have a graph context
         # to link events and internal transactions to, and to record missing price info if needed
         log_to_cli(f"Blockchain {tx.blockchain} - Processing transaction {tx.transaction_hash} for graph generation...")
@@ -234,7 +243,7 @@ class BaseGraphGenerator(ABC):
         op_index = 0
         op_index = self._process_traces(graph_obj, tx, op_index)
 
-        # Then process log events to capture token transfers and approvals, as well as router events. 
+        # Then process log events to capture token transfers and approvals, as well as router events.
         # For tokens, also attempt to resolve price info and record any missing prices for later resolution.
         tx_receipt = self.rpc_client.get_transaction_receipt(tx.blockchain, tx.transaction_hash)
         for event in tx_receipt["logs"]:
@@ -761,7 +770,7 @@ class BaseGraphGenerator(ABC):
 
         log_to_cli(f"Querying Dune for native token transfers related to {len(tx_hashes)} transaction hashes on {blockchain}...")
         try:
-            min_ts, max_ts = self.fetch_transactions_timestamp_interval()
+            min_ts, max_ts = self._cached_fetch_transactions_timestamp_interval()
             dune_results = self.dune_client.fetch_native_transactions(blockchain, tx_hashes, min_ts, max_ts)
             op_idx_counters = {}
 

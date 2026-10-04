@@ -3,8 +3,15 @@ import os
 
 from eth_abi import decode as abi_decode
 from web3 import Web3
+from web3.contract import Contract
 
 from utils.utils import CliColor, log_to_cli
+
+_ERC20_ABI_PATH = os.path.normpath(os.path.join(os.path.dirname(__file__), "ABI", "erc20_abi.json"))
+with open(_ERC20_ABI_PATH, "r") as _f:
+    _ERC20_ABI = json.load(_f)
+
+_web3 = Web3()
 
 
 class TokenInspector:
@@ -12,6 +19,7 @@ class TokenInspector:
         self.rpc_client = rpc_client
         self.token_metadata_repo = token_metadata_repo
         self._unknown_contracts: set[str] = set()
+        self._contract_cache: dict[str, Contract] = {}
 
     def ensure_metadata(self, address: str, blockchain: str):
         metadata = self.token_metadata_repo.get_token_metadata_by_contract_and_blockchain(address, blockchain)
@@ -27,12 +35,13 @@ class TokenInspector:
         self._unknown_contracts.add(address)
         return None
 
-    def load_erc20_contract(self, address: str):
+    def load_erc20_contract(self, address: str) -> Contract:
         checksum_address = Web3.to_checksum_address(address)
-        abi_path = os.path.normpath(os.path.join(os.path.dirname(__file__), "ABI", "erc20_abi.json"))
-        with open(abi_path, "r") as f:
-            abi = json.load(f)
-        return Web3().eth.contract(address=checksum_address, abi=abi)
+        contract = self._contract_cache.get(checksum_address)
+        if contract is None:
+            contract = _web3.eth.contract(address=checksum_address, abi=_ERC20_ABI)
+            self._contract_cache[checksum_address] = contract
+        return contract
 
     def _detect_erc20(self, address: str, blockchain: str) -> bool:
         function_signatures = [

@@ -1,6 +1,7 @@
 from abc import abstractmethod
 from contextlib import contextmanager
 
+from utils.timing import io_timer
 from utils.utils import log_error
 
 
@@ -11,22 +12,23 @@ class BaseRepository:
 
     @contextmanager
     def get_session(self):
-        session = self._session_factory()
-        session.expire_on_commit = False
-        try:
-            yield session
-            session.commit()
-        except Exception as e:
-            session.rollback()
-            log_error(self.model.__name__, e)
-            raise e
-        finally:
-            # For scoped_session, use remove() to clear the current thread's session.
-            # If you’re using a plain session, you’d call session.close() instead.
-            if hasattr(self._session_factory, "remove"):
-                self._session_factory.remove()
-            else:
-                session.close()
+        with io_timer.track("db"):
+            session = self._session_factory()
+            session.expire_on_commit = False
+            try:
+                yield session
+                session.commit()
+            except Exception as e:
+                session.rollback()
+                log_error(self.model.__name__, e)
+                raise e
+            finally:
+                # For scoped_session, use remove() to clear the current thread's session.
+                # If you’re using a plain session, you’d call session.close() instead.
+                if hasattr(self._session_factory, "remove"):
+                    self._session_factory.remove()
+                else:
+                    session.close()
 
     def get_all(self):
         """

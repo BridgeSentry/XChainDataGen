@@ -39,8 +39,6 @@ class GraphEdgeType(Enum):
 class EventType(Enum):
     TRANSFER = "transfer"
     APPROVAL = "approval"
-    BURN = "burn"
-    MINT = "mint"
     OPERATION_REQUEST_SIGNING = "operation_request_signing"
     OPERATION_FINALIZED = "operation_finalized"
     DEPOSIT_REQUEST = "deposit_request"

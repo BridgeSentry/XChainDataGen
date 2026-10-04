@@ -1,6 +1,6 @@
 from config.constants import Bridge
 from graph_generator.graph_label import BlockchainGraphLabel, CrossChainGraphLabel, GraphNodeType
-from repository.graphs.models import GraphMappingBlockchain
+from repository.graphs.models import GraphMappingBlockchain, GraphNode
 
 
 class GraphObject:
@@ -16,6 +16,14 @@ class GraphObject:
         self.tx_timestamp = None
         self.nodes = []
         self.edges = []
+        self._nodes_by_address: dict[str, GraphNode] = {}
+        self._nodes_by_id: dict[int, GraphNode] = {}
+
+    def _reindex_nodes(self):
+        self._nodes_by_address = {
+            node.address.lower(): node for node in self.nodes if node.address is not None
+        }
+        self._nodes_by_id = {node.node_id: node for node in self.nodes}
 
     def _resolved(self, address: str) -> str:
         if self._resolve_address and self.graph_mapping:
@@ -29,7 +37,8 @@ class GraphObject:
 
         self.nodes = self.node_repo.get_by_chain_graph_id(self.graph_mapping.graph_id)
         self.edges = self.edge_repo.get_by_chain_graph_id(self.graph_mapping.graph_id)
-        
+        self._reindex_nodes()
+
         # If possible, set the graph's timestamp based on the nodes
         for node in self.nodes:
             if node.timestamp is not None:
@@ -56,7 +65,8 @@ class GraphObject:
 
     def attach_nodes(self, nodes):
         self.nodes = nodes
-    
+        self._reindex_nodes()
+
     def create_node(self, node_data):
         if node_data.get("address") in self.attacker_addresses:
             # Update graph mapping label to reflect that this graph contains an attacker address
@@ -66,16 +76,19 @@ class GraphObject:
 
         node = self.node_repo.create(node_data)
         self.nodes.append(node)
+        self._nodes_by_id[node.node_id] = node
+        if node.address is not None:
+            self._nodes_by_address[node.address.lower()] = node
         return node
-    
+
     def fetch_or_create_token_node(self, address: str, timestamp: int):
-        for node in self.nodes:
-            if node.address.lower() == address.lower():
-                # Ensure the node type is set to TOKEN
-                if node.node_type != GraphNodeType.TOKEN.value:
-                    self.update_node_type(node.node_id, GraphNodeType.TOKEN.value)
-                return node
-        
+        existing = self._nodes_by_address.get(address.lower())
+        if existing is not None:
+            # Ensure the node type is set to TOKEN
+            if existing.node_type != GraphNodeType.TOKEN.value:
+                self.update_node_type(existing.node_id, GraphNodeType.TOKEN.value)
+            return existing
+
         token_metadata = self.token_metadata_repo.get_token_metadata_by_contract_and_blockchain(address, self.graph_mapping.blockchain)
         new_node_data = {
             "chain_graph_id": self.graph_mapping.graph_id,
@@ -100,10 +113,10 @@ class GraphObject:
         # (e.g., due to multiple routing contracts having split functions that
         # process a deposit/withdrawal).
         resolved_address = self._resolved(address)
-        for node in self.nodes:
-            if node.address.lower() == resolved_address.lower():
-                return node
-        
+        existing = self._nodes_by_address.get(resolved_address.lower())
+        if existing is not None:
+            return existing
+
         # If not found, create a new node with the provided type, unless
         # the address was resolved to a different address, 
         # in which case we assume it's a router address.
@@ -161,6 +174,9 @@ class GraphObject:
                 if node.node_id == node_id:
                     self.nodes[i] = updated_node
                     break
+            self._nodes_by_id[node_id] = updated_node
+            if updated_node.address is not None:
+                self._nodes_by_address[updated_node.address.lower()] = updated_node
         return updated_node
 
     def create_edge(self, source_id, target_id, edge_type, event_index=None, attributes=None, attributes_text=None):
@@ -193,11 +209,7 @@ class GraphObject:
         return self.create_edge(source_id, target_id, edge_type, event_index, attributes, attributes_text)
 
     def fetch_node(self, node_id):
-        for node in self.nodes:
-            if node.node_id == node_id:
-                return node
-        return None
-    
+        return self._nodes_by_id.get(node_id)
 
     def fetch_node_by_address(self, address, create_if_not_exists=False):
         # Always resolve the address before fetching to ensure consistency.
@@ -206,10 +218,7 @@ class GraphObject:
         # (e.g., due to multiple routing contracts having split functions that
         # process a deposit/withdrawal).
         address = self._resolved(address)
-        for node in self.nodes:
-            if node.address.lower() == address.lower():
-                return node
-        return None
+        return self._nodes_by_address.get(address.lower())
     
     def fetch_edge(self, edge_id):
         for edge in self.edges:
