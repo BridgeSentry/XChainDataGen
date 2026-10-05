@@ -1,7 +1,7 @@
 <h2><center>XChainDataGen (Fork): A Cross-Chain Dataset Generation Framework</center></h2>
 
 <span><center>[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.7+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/release/python-3110/) [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/AndreAugusto11/XChainWatcher/blob/main/CONTRIBUTING.md) </center></span>
+[![Python 3.11](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/release/python-3110/)</center></span>
 
 This repository contains the code for XChainDataGen, a cross-chain dataset extraction and generation framework -- i.e., a tool that **extracts** cross-chain data from bridge contracts in multiple blockchains and **generates** datasets of cross-chain transactions (CCTX).
 
@@ -139,6 +139,18 @@ The -d flag runs the containers in detached mode.
 
 ### Running XChainDataGen CLI Commands
 
+>[!WARNING]
+> Due to increased RPC and DUNE API restrictions, the extraction process may not work properly for all bridges and blockchains. To account for this, we have added a backup SQL dump of the data extracted for our BridgeSentry analysis, located at [dataset_dump_backup.sql](./dataset_dump_backup.sql). This dump can be restored to the PostgreSQL database using either DBeaver's GUI, or the following command:
+>
+>```bash
+>pg_restore -U user -d db_app --clean --if-exists --no-owner dataset_dump_backup.sql # If targeting a local install
+>pg_restore --no-owner --no-privileges -v -d "postgresql://user:password@localhost:5432/db_app" dataset_dump_backup.sql # If targeting using a URL connection string
+>docker exec -i <container_name> pg_restore -U user -d db_app --no-owner < dataset_dump_backup.sql # If targeting from inside the container
+>```
+>
+>⚠️ Keep in mind that these commands will overwrite any existing data in the database. The backup also contains the manually imported transaction data from the YAML files.
+
+
 Extract the data related to a single bridge in multiple contracts using the following template:
 
 ```bash
@@ -148,19 +160,6 @@ docker-compose run --rm app extract --bridge <BRIDGE_NAME> --start_ts <START_TIM
 To override the default data storage, use the `-e` flag to assign a new value to the environment variable DATABASE_URL (e.g., `-e DATABASE_URL=postgresql://user:password@db:5432/ccip`).
 
 ⚠️ Take into consideration that, depending on the number of contracts deployed for each bridge, on the number of events emitted by each in the interval of analysis, and the capabilities of your machine, this process can take long periods ⚠️
-
-<br></br>
-**Example for Cross-Chain Interoperability Protocol (CCIP by Chainlink) (~10 minutes)**
-
-Extract the data related to CCIP from Dec 01, 2024 00:00:00 GMT+0000 to Dec 02, 2024 00:00:00 GMT+0000.
-
-**Unix timestamp:** 1733011200 (Sun Dec 01 2024 00:00:00 GMT+0000)
-
-**Unix timestamp:** 1733097600 (Sun Dec 02 2024 00:00:00 GMT+0000)
-
-```bash
-docker-compose run --rm app extract --bridge ccip --start_ts 1733011200 --end_ts 1733097600 --blockchains ethereum arbitrum avalanche polygon optimism base bnb gnosis ronin linea scroll
-```
 
 #### Cross-Chain Transaction Generator (~1 minute)
 
@@ -181,7 +180,7 @@ docker-compose run --rm app generate_graph_data --bridge ronin --blockchains eth
 To flag graphs that could not be linked into a complete cross-chain transaction (optionally restricted to a single bridge):
 
 ```bash
-docker-compose run --rm app clean_graph_data --bridge ccip
+docker-compose run --rm app clean_graph_data --bridge ronin
 ```
 
 #### Retrieve Generated Data
@@ -199,22 +198,6 @@ For CCIP, all cross-chain transactions will be in the ccip_cross_chain_transacti
 ```sql
 select count(*) from ccip_cross_chain_transactions;
 ```
-
-### Output Examples
-
-We provide some examples of what you can expect in a successful run of XChainDataGen:
-
-#### Data Extraction for CCIP
-
-<img src="./docs/figures/extract_ccip.png">
-
-#### CCTX Generation for CCIP
-
-<img src="./docs/figures/generate_ccip.png">
-
-#### Database Relations for CCIP
-
-<img src="./docs/figures/db_ccip.png">
 
 ## Run locally
 
@@ -251,7 +234,7 @@ Firstly, make sure Postgres is installed and you have a working database running
 2. Activate virstual environment `source .xchaindata/bin/activate`
 3. Install all dependencies `pip install -r requirements.txt`
 4. To stop using the env, run `deactivate`
-5. Create a `.env` file setting the `DATABASE_URL` variable according to your database connection.
+5. Create a `.env` file setting the `DATABASE_URL` variable according to your database connection, and other remaining environment variables as specified in the `.env.template` file.
 
 #### Using Terminal
 
@@ -327,7 +310,7 @@ The analysis of data extracted between Jun 1, 2024 and December 31, 2024 can be 
 
 ## Suggested Citation
 
-This work is an extension of our research. If using this repository, cite as:
+This work is an extension of the research made by @AndreAugusto11. If using this repository, cite as:
 
 ```bibtex
 @misc{augusto2025xchaindatagencrosschaindatasetgeneration,
